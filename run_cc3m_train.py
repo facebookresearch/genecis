@@ -150,14 +150,6 @@ def main():
 
     executor.update_parameters(name="cc3m")
 
-    # args_new.base_contrastive_symmetric = 0
-    # args_new.all_explicit_negatives = 0
-    # args_new.sample_explicit_negatives = 0 
-    # args_new.wrong_reference_negatives = 0
-    # args_new.wrong_condition_negatives = 0
-    # args_new.wrong_reference_unbounded_distance = 0
-    # args_new.wrong_condition_unbounded_distance = 0
-
     all_trainers = []
     for concreteness_threshold in (4.8,):
         for num_samples_per_epoch in (1.6e6,):

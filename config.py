@@ -16,3 +16,8 @@ cc3m_tsg_path = '/private/home/sgvaze/conditional_similarity/cc_tsg_3m.pt'
 cc3m_deterministic_root_path = '/checkpoint/sgvaze/conditional_similarity/cc3m_deterministic_samples/CCConditionalDistractor_1.6E+06_4.8_default_concreteness.pt'
 noun_concreteness_score_path = '/checkpoint/sgvaze/conditional_similarity/misc/Concreteness_ratings_Brysbaert_et_al_BRM.txt'
 log_dir = '/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3'
+
+# Params for CC3M triplets
+cc3m_concreteness_threshold = 4.8
+cc3m_min_images_with_subject = 5
+NUM_SHARDS = 800                # How many parallel shards to generate deterministic triplets with

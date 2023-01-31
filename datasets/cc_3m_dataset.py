@@ -9,7 +9,7 @@ from copy import deepcopy
 
 from tqdm import tqdm
 
-from config import cc3m_root, cc3m_deterministic_root_path, cc3m_tsg_path, noun_concreteness_score_path
+from config import cc3m_root, cc3m_deterministic_root_path, cc3m_tsg_path, noun_concreteness_score_path, NUM_SHARDS
 
 def create_deterministic_subset(dataset, num_samples=10e6, save_path=None, concreteness_threshold=None, shard_index=None):
 
@@ -33,7 +33,7 @@ def create_deterministic_subset(dataset, num_samples=10e6, save_path=None, concr
 
 class CCConditionalBaseDataset(Dataset):
 
-    def __init__(self, deterministic_samples_key: str = None,       # Can either be key into predefined paths or an entire path in itself
+    def __init__(self, cc3m_deterministic_root_path: str = None,       # Can either be key into predefined paths or an entire path in itself
                         min_images_with_subject: int = 2, 
                         num_samples_per_epoch: int = 100, 
                         transform = None, 
@@ -49,7 +49,7 @@ class CCConditionalBaseDataset(Dataset):
         self.cc3m_annots_path = cc3m_annots_path
         self.transform = transform
         self.tokenizer = tokenizer
-        self.deterministic_dataset = True if deterministic_samples_key is not None else False
+        self.deterministic_dataset = True if cc3m_deterministic_root_path is not None else False
         self.num_samples_per_epoch = num_samples_per_epoch
 
         annotated_samples = torch.load(cc3m_annots_path)
@@ -132,8 +132,8 @@ class CCConditionalBaseDataset(Dataset):
         # --------------------------
         if self.deterministic_dataset:
 
-            print(f'Using deterministic samples, loading from {deterministic_samples_key}...')
-            self.samples = torch.load(deterministic_samples_key)
+            print(f'Using deterministic samples, loading from {cc3m_deterministic_root_path}...')
+            self.samples = torch.load(cc3m_deterministic_root_path)
 
             # Retrieve deterministic sample with index
             self.get_sample = lambda index: self.samples[index]
@@ -283,8 +283,6 @@ class CCConditionalDistractor(CCConditionalBaseDataset):
 
 class DeterministicDatasetWithConcreteness(Dataset):
 
-        NUM_SHARDS = 800
-
         def __init__(self, base_dataset: CCConditionalBaseDataset,
                            n_samples, 
                            concreteness_threshold=None, 
@@ -294,6 +292,7 @@ class DeterministicDatasetWithConcreteness(Dataset):
             self.base_dataset = base_dataset
             self.n_samples = n_samples
             self.concreteness_threshold = concreteness_threshold
+            self.max_tries = 1000        # How many times to try and generate a sample with sufficient concreteness given a seed
 
             if shard_index is None:
                 self.sample_seeds = np.arange(n_samples)
@@ -316,7 +315,6 @@ class DeterministicDatasetWithConcreteness(Dataset):
             
             if self.concreteness_threshold is not None:
                 
-                MAX_TRIES = 1000
                 num_tries = 0
                 sample_concreteness = self.compute_sample_concreteness(sample)
 
@@ -325,7 +323,7 @@ class DeterministicDatasetWithConcreteness(Dataset):
                     sample = self.base_dataset.get_random_sample(None) 
                     sample_concreteness = self.compute_sample_concreteness(sample)
                     num_tries += 1
-                    if num_tries == MAX_TRIES:
+                    if num_tries == self.max_tries:
                         print(f'Sample at seed {index} is a difficult sample')
 
             return sample
@@ -386,13 +384,3 @@ class DeterministicDatasetWithConcreteness(Dataset):
                     sample_concreteness.append(concreteness_score)
             
             return np.mean(sample_concreteness)
-
-if __name__ == '__main__':
-
-    import clip
-
-    # clip_model, preproces = clip.load('RN50')
-    # tokenizer = clip.tokenize
-
-    # dataset = CCConditionalWithConcreteness(min_images_with_subject=5, num_deterministic_samples=None, transform=preproces, tokenizer=tokenizer, concreteness_threshold=4.0)
-    # create_deterministic_subset(dataset, 1e5)

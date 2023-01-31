@@ -41,17 +41,17 @@ def get_args_parser():
 
     parser = argparse.ArgumentParser('CC3M', add_help=False)
 
-    parser.add_argument('--model', default='RN50x4', type=str, help='Which CLIP model we are using as backbone')
-    parser.add_argument('--eval_dataset', default='CIRR', type=str, help='Downstream dataset')
+    parser.add_argument('--backbone', default='RN50x4', type=str, help='Which CLIP model we are using as backbone')
     parser.add_argument('--num_workers', default=8, type=int)
     parser.add_argument('--log_dir', default=cfg.log_dir)
     parser.add_argument('--seed', default=0, type=int)
 
     # Optimization hyper params
+    parser.add_argument('--finetune_mode', default='image_plus_text_whole', type=none_flag, help='\{image_plus_text, text_only, image_only, text_only_whole\}')
     parser.add_argument('--optimizer', default='adamw', type=str)
     parser.add_argument('--scheduler', default='cosine', type=str)
     parser.add_argument('--batch_size_per_gpu', default=256, type=int)
-    parser.add_argument('--lr', default=2e-5, type=float)
+    parser.add_argument('--lr', default=1e-6, type=float)
     parser.add_argument('--lamda', default=100, type=float, help='1 / temperature for sotftmax operation')
     parser.add_argument('--weight_decay', default=0, type=float)
     parser.add_argument('--epochs', default=100, type=int)
@@ -59,23 +59,17 @@ def get_args_parser():
 
     # Loss lambdas
     parser.add_argument('--base_contrastive', default=1, type=float)
-    parser.add_argument('--base_contrastive_symmetric', default=0, type=float)
-    parser.add_argument('--all_explicit_negatives', default=0, type=float)
-    parser.add_argument('--sample_explicit_negatives', default=0, type=float)
-    parser.add_argument('--wrong_reference_negatives', default=0, type=float)
-    parser.add_argument('--wrong_condition_negatives', default=0, type=float)
-    parser.add_argument('--wrong_reference_unbounded_distance', default=0, type=float)
-    parser.add_argument('--wrong_condition_unbounded_distance', default=0, type=float)
 
-    # Data params
-    parser.add_argument('--min_images_with_subject', default=5, type=int)
-    parser.add_argument('--train_dataset', default='cc3m', type=str)
-    parser.add_argument('--num_samples_per_epoch', default=60000, type=int)
+    # CC3M extracted data paths
+    parser.add_argument('--cc3m_deterministic_root_path', default=cfg.cc3m_deterministic_root_path, type=int)
+    parser.add_argument('--cc3m_annots_path', default=cfg.cc3m_tsg_path, type=str)
+
+    # General CC3M params
+    parser.add_argument('--min_images_with_subject', default=cfg.cc3m_min_images_with_subject, type=int)
+    parser.add_argument('--num_samples_per_epoch', default=1600000, type=int)
     parser.add_argument('--deterministic_samples_key', default=None, type=none_flag, help='A key defining which deterministic samples to use')
-    parser.add_argument('--concreteness_threshold', default=4.0, type=float, help="Threshold for how visually conrete the sampls images are, only relevant with train_loss=CCConditionalWithConcreteness")
-    parser.add_argument('--prompt_prepend', default=None, type=none_flag, help='Specify with string to pre-pend this string to the CC3M prompt', nargs='+')
+    parser.add_argument('--concreteness_threshold', default=cfg.cc3m_concreteness_threshold, type=float, help="Threshold for how visually conrete the sampls images are")
     parser.add_argument('--val_start_idx', default=0, type=int, help='Dictates where from the dataset to sample the validation set')
-    parser.add_argument('--tsg_path_key', default='1.2e5_ims', type=str, help='Dictates from how many images the deterministic samples were generated, just for COCO. 1.2e5 is all images')        # Just for COCO
 
     # Dist params
     parser.add_argument("--dist_url", default="env://", type=str, help="""url used to set up
@@ -84,9 +78,6 @@ def get_args_parser():
 
     # Combiner Model
     parser.add_argument('--combiner_mode', default='combiner_original', type=str, help='\{text_only, image_only, image_plus_text, combiner_original}')
-    parser.add_argument('--norm_feats_before_combining', default=False, type=bool_flag, help='Whether or not to normalise the features before combining them')
-    parser.add_argument('--finetune_mode', default=None, type=none_flag, help='\{image_plus_text, text_only, image_only, text_only_whole\}')
-
 
     return parser
 
@@ -103,16 +94,13 @@ def main(args):
     print("\n".join("%s: %s" % (k, str(v)) for k, v in sorted(dict(vars(args)).items())))
     cudnn.benchmark = True
 
-    cc3m_annots_path = cfg.cc3m_tsg_path
-    args.deterministic_samples_key = cfg.cc3m_deterministic_root_path
-
     # --------------
     # GET BACKBONE
     # --------------
     print('Loading models...')
     
     # define clip model and preprocess pipeline, get input_dim and feature_dim
-    clip_model, clip_preprocess = clip.load(args.model)
+    clip_model, clip_preprocess = clip.load(args.backbone)
     image_size = clip_preprocess.transforms[1].size[0]
 
     train_prepocess = T.Compose([
@@ -160,10 +148,10 @@ def main(args):
     # Dataset class changes based on which loss we are using
     print('Loading datasets...')
     tokenizer = partial(clip.tokenize, truncate=True)
-    train_dataset = CCConditionalDistractor(cc3m_annots_path=cc3m_annots_path,
+    train_dataset = CCConditionalDistractor(cc3m_annots_path=args.cc3m_annots_path,
         min_images_with_subject=args.min_images_with_subject, 
         num_samples_per_epoch=args.num_samples_per_epoch,
-        deterministic_samples_key=args.deterministic_samples_key,
+        cc3m_deterministic_root_path=args.cc3m_deterministic_root_path,
         transform=train_prepocess, 
         tokenizer=tokenizer)
 
@@ -172,7 +160,7 @@ def main(args):
 
     # --------------
     # GET DOWNSTREAM EVAL DATASETS
-    # CIRR and Change Attribute and Same Object
+    # CIRR and Change Attribute and Focus Object
     # --------------
     cirr_val_dataset_return_images = CIRRImageDataset(split='val', preprocess=clip_preprocess, tokenizer=tokenizer)
     cirr_val_dataset_global = CIRRValGlobalDataset(split='val', preprocess=clip_preprocess, tokenizer=tokenizer)
@@ -309,10 +297,10 @@ def main(args):
             recall_meters_cirr = validate_global(clip_model, combiner, cirr_valloader_only_images, cirr_valloader_global, topk=(1, 5, 10))
 
             # Val epoch Change Attribute
-            recall_meters_vaw = validate(clip_model, combiner, change_attribute_valloader, topk=(1, 2, 3))
+            recall_meters_att = validate(clip_model, combiner, change_attribute_valloader, topk=(1, 2, 3))
 
-            # Val epoch Same Object
-            recall_meters_coco = validate(clip_model, combiner, same_object_valloader, topk=(1, 2, 3))
+            # Val epoch Focus Object
+            recall_meters_obj = validate(clip_model, combiner, same_object_valloader, topk=(1, 2, 3))
 
             # Log losses
             for loss_name in train_loss_meters.keys():
@@ -332,12 +320,12 @@ def main(args):
                 args.writer.add_scalar(f'CIRR Recall/Recall @ {recall_at}', meter.avg,global_step=global_step)
 
             # Log VAW recalls
-            for recall_at, meter in recall_meters_vaw.items():
-                args.writer.add_scalar(f'VAW Recall/Recall @ {recall_at}', meter.avg,global_step=global_step)
+            for recall_at, meter in recall_meters_att.items():
+                args.writer.add_scalar(f'Change Attribute Recall/Recall @ {recall_at}', meter.avg,global_step=global_step)
 
             # Log COCO recalls
-            for recall_at, meter in recall_meters_coco.items():
-                args.writer.add_scalar(f'COCO Recall/Recall @ {recall_at}', meter.avg,global_step=global_step)
+            for recall_at, meter in recall_meters_obj.items():
+                args.writer.add_scalar(f'Focus Object Recall/Recall @ {recall_at}', meter.avg,global_step=global_step)
             
             # Log LR
             args.writer.add_scalar('LR', scalar_value=get_mean_lr(optimizer), global_step=global_step)
