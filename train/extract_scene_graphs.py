@@ -22,6 +22,8 @@ def parse_single_annot(annot):
 
 if __name__ == '__main__': 
 
+    print(f'Parsing scene graphs for CC3M, saving scene graph annotations to {cfg.cc3m_tsg_path}')
+    print('Loading CC3M data...')
     images_npy = np.load(os.path.join(cfg.cc3m_root, 'train_all.npy'), allow_pickle=True)
     images = pd.DataFrame(images_npy.tolist())
 

@@ -19,11 +19,10 @@ def create_deterministic_subset(dataset, num_samples=10e6, save_path=None, concr
     if save_path is None:
         save_path = cc3m_deterministic_root_path
 
-    print(f'Deterministically creating {num_samples} samples and saving to {save_path}...')
-
     determ_dataset = DeterministicDatasetWithConcreteness(dataset, num_samples, concreteness_threshold=concreteness_threshold, shard_index=shard_index)
     loader = torch.utils.data.DataLoader(determ_dataset, shuffle=False, num_workers=4, batch_size=8, collate_fn=DeterministicDatasetWithConcreteness.collate_fn)
-    
+    print(f'Deterministically creating {len(determ_dataset)} samples and saving to {save_path}...')
+
     all_samples = []
     for batch_idx, batch in enumerate(tqdm(loader)):
         
@@ -86,7 +85,7 @@ class CCConditionalBaseDataset(Dataset):
         #       Which indices contain images from each other object
         # -------------
 
-        print('Finding candidate subjects...')
+        print('------Finding candidate subjects...')
         uq_subjects = {}
         for idx, sample in enumerate(self.annotated_samples_df.values):
 
@@ -121,7 +120,7 @@ class CCConditionalBaseDataset(Dataset):
         
         # Print total images considered
         cands_ = set(self.candidate_subjects)
-        print(f'Considering subset of {len(set.union(*[v["image_ids"] for k,v in self.uq_subjects.items() if k in cands_]))}')
+        print(f'------Considering subset of {len(set.union(*[v["image_ids"] for k,v in self.uq_subjects.items() if k in cands_]))}')
 
         p_candidate_subjects = np.array([len(v['image_ids']) for k, v in uq_subjects.items() if len(v['image_ids']) >= min_images_with_subject and len(v['objects']) >= 2]).astype('float')
         p_candidate_subjects /= p_candidate_subjects.sum()
@@ -132,21 +131,21 @@ class CCConditionalBaseDataset(Dataset):
         # --------------------------
         if self.deterministic_dataset:
 
-            print(f'Using deterministic samples, loading from {cc3m_deterministic_root_path}...')
+            print(f'------Using deterministic samples, loading from {cc3m_deterministic_root_path}...')
             self.samples = torch.load(cc3m_deterministic_root_path)
 
             # Retrieve deterministic sample with index
             self.get_sample = lambda index: self.samples[index]
 
             # Set length
-            print(f'Running deterministic dataset with {len(self)} samples...')
+            print(f'------Running deterministic dataset with {len(self)} samples...')
 
         else:
 
             # Generate random sample on the fly
             self.get_sample = self.get_random_sample
 
-            print(f'Generating samples on the fly with {len(self)} samples per epoch...')
+            print(f'------Generating samples on the fly with {len(self)} samples per epoch...')
 
     def __len__(self):
 
@@ -293,6 +292,7 @@ class DeterministicDatasetWithConcreteness(Dataset):
             self.n_samples = n_samples
             self.concreteness_threshold = concreteness_threshold
             self.max_tries = 1000        # How many times to try and generate a sample with sufficient concreteness given a seed
+            self.NUM_SHARDS = NUM_SHARDS
 
             if shard_index is None:
                 self.sample_seeds = np.arange(n_samples)

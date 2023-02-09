@@ -115,8 +115,6 @@ def main(args):
 
     convert_models_to_fp32(clip_model)
     clip_model.eval()
-
-    input_dim = clip_model.visual.input_resolution
     feature_dim = clip_model.visual.output_dim
 
     # Turn grad off in all parameters in backbone
@@ -126,7 +124,7 @@ def main(args):
     # --------------
     # GET COMBINER
     # --------------
-    combiner = Combiner(clip_feature_dim=feature_dim, projection_dim=2560, hidden_dim=2 * 2560, norm_feats_before_combining=args.norm_feats_before_combining)
+    combiner = Combiner(clip_feature_dim=feature_dim, projection_dim=2560, hidden_dim=2 * 2560)
 
     # --------------
     # FINE TUNEBACKBONE

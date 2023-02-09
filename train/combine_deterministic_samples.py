@@ -1,14 +1,19 @@
+"""
+This script collects shards of mined triplets and combines them into a single file
+
+Assumes you have run create_deterministic_samples.py in shard mode first to create the triplets.
+"""
 import torch
 import argparse
 import os
 from tqdm import tqdm
 
+import config as cfg
+root_path = cfg.cc3m_deterministic_root_path[:-3]       # Get rid of the .pt at the end of the file name, root_path should be a directory
 parser = argparse.ArgumentParser('DetermCombine', add_help=False)
 
 # Data
-parser.add_argument('--root_path', default='/checkpoint/sgvaze/conditional_similarity/cc3m_deterministic_samples/CCConditionalDistractor_2.5E+04_4.8_nico_no_filter_concreteness', type=str, help='Root path where all shards are stored')
-parser.add_argument('--n_shards', default=400, type=int, help='Num shards to combine')
-
+parser.add_argument('--root_path', default=root_path, type=str, help='Root path where all shards are stored')
 args = parser.parse_args()
 
 # List dir

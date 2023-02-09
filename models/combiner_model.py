@@ -4,7 +4,7 @@ from torch import nn
 import numpy as np
 
 """
-Code adapted from: https://github.com/ABaldrati/CLIP4CirDemo/blob/main/model.py
+Code from: https://github.com/ABaldrati/CLIP4CirDemo/blob/main/model.py
 """
 
 class Combiner(nn.Module):
@@ -12,7 +12,7 @@ class Combiner(nn.Module):
     Combiner module which once trained fuses textual and visual information
     """
 
-    def __init__(self, clip_feature_dim: int, projection_dim: int, hidden_dim: int, norm_feats_before_combining=False):
+    def __init__(self, clip_feature_dim: int, projection_dim: int, hidden_dim: int):
         """
         :param clip_feature_dim: CLIP input feature dimension
         :param projection_dim: projection dimension
@@ -34,7 +34,6 @@ class Combiner(nn.Module):
                                             nn.Sigmoid())
 
         self.logit_scale = 100
-        self.norm_feats_before_combining = norm_feats_before_combining
 
     @torch.jit.export
     def forward(self, image_features, text_features):
@@ -44,9 +43,6 @@ class Combiner(nn.Module):
         :param text_features: CLIP relative caption features
         :return: predicted features
         """
-        if self.norm_feats_before_combining:
-            image_features = F.normalize(image_features)
-            text_features = F.normalize(text_features)
 
         text_projected_features = self.dropout1(F.relu(self.text_projection_layer(text_features)))
         image_projected_features = self.dropout2(F.relu(self.image_projection_layer(image_features)))

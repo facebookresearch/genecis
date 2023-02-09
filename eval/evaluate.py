@@ -119,8 +119,6 @@ def main(args):
     tokenizer = partial(clip.tokenize, truncate=True)
     genecis_split_path = os.path.join(genecis_root, f'{args.dataset}.pkl')
 
-    genecis_split_path = temp_genecis_paths[args.dataset]
-
     if args.dataset == 'CIRR':
 
         val_dataset_return_images = CIRRImageDataset(split='val', preprocess=preprocess, tokenizer=tokenizer)
