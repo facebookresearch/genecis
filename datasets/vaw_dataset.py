@@ -1,5 +1,4 @@
 from torch.utils.data import Dataset
-import pandas as pd
 import os
 
 from PIL import Image
@@ -27,34 +26,9 @@ def expand2square(pil_img, background_color=(0, 0, 0)):
 
 class VAWDataset(Dataset):
 
-    def __init__(self, split='all', transform=None, image_dir=cfg.visual_genome_images, root_dir=cfg.vaw_root) -> None:
+    def __init__(self, transform=None, image_dir=cfg.visual_genome_images) -> None:
         super().__init__()
 
-        if split == 'all':
-            all_annot_paths = [os.path.join(root_dir, x) for x in ('train_part1.json', 'train_part2.json', 'val.json', 'test.json')]
-            all_annots = [pd.read_json(p) for p in all_annot_paths]
-            all_annots = pd.concat(all_annots)
-
-        elif split == 'train':
-            
-            all_annot_paths = [os.path.join(root_dir, x) for x in ('train_part1.json', 'train_part2.json', 'val.json', 'test.json')]
-            all_annots = [pd.read_json(p) for p in all_annot_paths]
-            all_annots = pd.concat(all_annots)
-
-        elif split == 'val':
-            
-            path = os.path.join(root_dir, 'val.json')
-            all_annots = pd.read_json(path)
-
-        elif split == 'test':
-            
-            path = os.path.join(root_dir, 'test.json')
-            all_annots = pd.read_json(path)
-        
-        else:
-            raise ValueError
-
-        self.meta_data = all_annots
         self.image_dir = image_dir
         self.transform = transform
         self.dilate = DILATION

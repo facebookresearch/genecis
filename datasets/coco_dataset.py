@@ -19,7 +19,7 @@ class COCODataset(Dataset):
     def load_sample(self, sample):
 
         fname = sample.filepath.split('/')[-1]
-        fpath = os.path.join(self.root_dir, 'val2017', fname)
+        fpath = os.path.join(self.root_dir, fname)
         img = Image.open(fpath)
         
         if self.transform is not None:
