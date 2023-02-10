@@ -1,12 +1,6 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
 import os
-import sys
-
-# Only add this import in case we are running from a standard bash script
-# Submitit requires sys.path to be done inside the job
-if 'SLURM_PROCID' not in os.environ:
-    sys.path.append(
-        os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-
 # Combiner model
 from models.combiner_model import Combiner
 

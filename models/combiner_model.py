@@ -1,3 +1,6 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Modified by Sagar Vaze from https://github.com/ABaldrati/CLIP4CirDemo/blob/main/model.py
+
 import torch
 import torch.nn.functional as F
 from torch import nn

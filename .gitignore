@@ -1,6 +1,2 @@
-# train/
-# bash_scripts/create_deterministic_samples.sh
-# bash_scripts/train_cc3m.sh
-# datasets/cc_3m_dataset.py
 */__pycache__/
 __pycache__

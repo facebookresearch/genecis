@@ -1,3 +1,6 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Modified by Sagar Vaze from https://github.com/facebookresearch/dino/blob/main/utils.py
+
 import torch.distributed as dist
 import torch
 import os

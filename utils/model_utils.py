@@ -1,3 +1,5 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
 import torch
 
 class FeatureComb(torch.nn.Module):

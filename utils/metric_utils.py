@@ -1,3 +1,6 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Modified by Sagar Vaze from https://github.com/hungthanhpham94/GRU4REC-pytorch/blob/master/lib/metric.py
+
 import torch
 
 def get_recall(indices, targets): #recall --> wether next item in session is within top K recommended items or not

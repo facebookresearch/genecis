@@ -1,3 +1,5 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
 """
 This script mines deterministic triplets. 
 If shard_index = None is specified, all triplets will be mined in a single process

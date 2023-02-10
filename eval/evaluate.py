@@ -1,7 +1,6 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
 import os
-import sys
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 
 from datasets.cirr_datasets import CIRRImageDataset, CIRRValGlobalDataset
 from datasets.vaw_dataset import VAWValSubset

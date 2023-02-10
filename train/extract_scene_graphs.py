@@ -1,6 +1,10 @@
-import os
-import sys
+# Copyright (c) Meta Platforms, Inc. and affiliates.
 
+"""
+Script extracts scene graphs from all samples in Conceptual Captions 3M
+"""
+
+import os
 import numpy as np
 import pandas as pd
 import sng_parser

@@ -1,3 +1,6 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Modified by Sagar Vaze from https://github.com/sgvaze/generalized-category-discovery/blob/main/project_utils/general_utils.py
+
 import argparse
 import torch
 import os

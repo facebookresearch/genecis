@@ -13,6 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Modified by Sagar Vaze from https://github.com/ecom-research/ComposeAE/blob/master/datasets.py
+
 """
 Code adapted from: https://github.com/ecom-research/ComposeAE/blob/master/datasets.py
 """

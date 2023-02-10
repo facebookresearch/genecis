@@ -1,14 +1,11 @@
-import os
-import sys
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+# Copyright (c) Meta Platforms, Inc. and affiliates.
 
+import os
 import torch
 from utils.gen_utils import AverageMeter
 from utils.metric_utils import get_recall
 
 from tqdm import tqdm
-import numpy as np
 
 @torch.no_grad()
 def validate_global(clip_model, combiner, val_image_loader, valloader_global, topk=(1, 5, 10), save_path=None):

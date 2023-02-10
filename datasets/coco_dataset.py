@@ -1,3 +1,5 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
 from torch.utils.data import Dataset
 import os
 

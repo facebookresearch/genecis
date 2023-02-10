@@ -1,3 +1,5 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
 """
 This script collects shards of mined triplets and combines them into a single file
 
