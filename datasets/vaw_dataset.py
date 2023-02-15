@@ -85,7 +85,7 @@ class VAWValSubset(VAWDataset):
         modal_gallery_len = gallery_lens[np.argmax(counts)]
         refined_val_samples = [s for s in val_samples if len(s['gallery']) == modal_gallery_len]
         self.val_samples = refined_val_samples
-
+        
         print(f'Evaluating VAW with gallery length {modal_gallery_len + 1} (including true target)')
         print(f'Discarding {len(val_samples) - len(refined_val_samples)} samples...')
 
@@ -100,7 +100,6 @@ class VAWValSubset(VAWDataset):
 
         sample = self.val_samples[index]
         reference = sample['reference']
-        reference_object = reference.object_name
 
         target = sample['target']
         gallery = sample['gallery']
@@ -119,7 +118,7 @@ class VAWValSubset(VAWDataset):
             caption = self.tokenizer(caption)
 
         # By construction, target_rank = 0
-        return reference, caption, gallery_and_target, 0, reference_object  
+        return reference, caption, gallery_and_target, 0  
 
     def __len__(self):
         return len(self.val_samples)

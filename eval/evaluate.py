@@ -38,7 +38,6 @@ def get_args_parser():
     parser.add_argument("--local_rank", default=0, type=int, help="Please ignore and do not set this argument.")
 
     # Model params
-    parser.add_argument('--eval_mode', default='global', type=str)        # {image/text/combiner}_{subset/global} or image_text_baseline_global
     parser.add_argument('--combiner_mode', default='text_only', type=str)
     parser.add_argument('--feature_comb_average', default=0.5, type=float)
 
@@ -48,14 +47,10 @@ def get_args_parser():
 
     # Dataset params
     parser.add_argument('--dataset', default='CIRR', type=str, help='Eval dataset')
-    parser.add_argument('--use_manual_annots', default=False, type=bool_flag, help='Whether to filter test samples based on manual annotations...')
     parser.add_argument('--use_complete_text_query', default=False, type=bool_flag, help='Only relevant for MIT States')
-    parser.add_argument('--eval_version', default='v3', type=str, help='Only valid for VAW and COCO')
-    parser.add_argument('--dilation', default=0.7, type=float, help='Only valid for VAW')
-    parser.add_argument('--pad_crop', default=True, type=bool_flag, help='Only valid for VAW')
 
     # Save params
-    parser.add_argument('--pred_save_name', default=None, type=none_flag, help='Where to save predictions, dont save by default')
+    parser.add_argument('--pred_save_path', default=None, type=none_flag, help='Where to save predictions, dont save by default')
 
     return parser
 
@@ -165,13 +160,13 @@ def main(args):
     if get_rank() == 0:
         
         if args.dataset in ('CIRR', 'mit_states'):
-            validate_global(clip_model, combiner, valloader_only_images, valloader_global, topk=(1, 5, 10), save=args.pred_save_name)
+            validate_global(clip_model, combiner, valloader_only_images, valloader_global, topk=(1, 5, 10), save_path=args.pred_save_path)
         else:
-            validate(clip_model, combiner, valloader_subset, topk=(1, 2, 3), save_path=args.pred_save_name)
+            validate(clip_model, combiner, valloader_subset, topk=(1, 2, 3), save_path=args.pred_save_path)
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser('CLIP4CIR', parents=[get_args_parser()])
+    parser = argparse.ArgumentParser('Eval', parents=[get_args_parser()])
     args = parser.parse_args()
     main(args)
     

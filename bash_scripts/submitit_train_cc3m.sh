@@ -1,6 +1,9 @@
-PYTHON='/private/home/sgvaze/miniconda3/envs/condsim/bin/python'
+# Project paths and init
+PYTHON='/private/home/sgvaze/miniconda3/envs/genecis/bin/python'
+PROJECT_ROOT='/private/home/sgvaze/genecis/'
 
-cd /private/home/sgvaze/conditional_similarity/
+export PYTHONPATH=$PROJECT_ROOT
+cd $PROJECT_ROOT
 
 # Submitit params
 PARTITION='devlab'

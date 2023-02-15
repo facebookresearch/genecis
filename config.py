@@ -15,7 +15,6 @@ cirr_root = '/checkpoint/sgvaze/datasets/cirr_data'
 
 # Experiment and meta data paths
 cc3m_tsg_path = '/checkpoint/sgvaze/genecis_test/cc_tsg_3m.pt'
-cc3m_tsg_path = '/private/home/sgvaze/conditional_similarity/cc_tsg_3m.pt'
 cc3m_deterministic_root_path = '/checkpoint/sgvaze/genecis_test/mined_triplets_1.6E6_4.8_thresh.pt'
 noun_concreteness_score_path = '/checkpoint/sgvaze/conditional_similarity/misc/Concreteness_ratings_Brysbaert_et_al_BRM.txt'
 log_dir = '/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3'

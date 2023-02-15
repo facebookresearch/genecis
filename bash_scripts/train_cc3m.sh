@@ -1,17 +1,10 @@
-#!/bin/bash
-#SBATCH --time=48:00:00
-#SBATCH --job-name=cc
-#SBATCH --partition=devlab
-#SBATCH --gres=gpu:2
-#SBATCH --mem=100G
-#SBATCH --cpus-per-task=10
-#SBATCH --array=0
-#SBATCH --output=/checkpoint/sgvaze/slurm_outputs/myLog-%A_%a.out
-#SBATCH --chdir=/private/home/sgvaze/conditional_similarity/conceptual_captions_explore
-#--------------------------
+# Project paths and init
+PYTHON='/private/home/sgvaze/miniconda3/envs/genecis/bin/python'
+PROJECT_ROOT='/private/home/sgvaze/genecis/'
 
-PYTHON='/private/home/sgvaze/miniconda3/envs/condsim/bin/python'
-cd '/private/home/sgvaze/conditional_similarity/conceptual_captions_explore'
+export PYTHONPATH=$PROJECT_ROOT
+cd $PROJECT_ROOT
+cd train/
 
 # Model params
 LAMDA=100
