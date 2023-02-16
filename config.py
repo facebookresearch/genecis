@@ -7,7 +7,7 @@ coco_root = '/datasets01/COCO/022719/val2017'                               # Va
 cc3m_root = '/large_experiments/cmd/cc'                                     # All images and captions
 
 # GeneCIS splits
-genecis_root = '/private/home/sgvaze/genecis/genecis'
+genecis_root = '/private/home/sgvaze/conditional_similarity/genecis_templates_test/'
 
 # For additional evaluations on MIT States and CIRR
 mit_states_root = '/checkpoint/sgvaze/datasets/mit_states'
