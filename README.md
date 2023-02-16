@@ -28,7 +28,8 @@ python -m spacy download en         # Required for scene graph parsing
 ```
 ## <a name="downloads"/> :arrow_down: Downloads
 
-To download the GeneCIS benchmark, and mined information from CC3M for training, follow the the [download instructions](/DOWNLOAD.md).
+Download instructions can be found [here](/DOWNLOAD.md). You will need to download the raw images from the COCO 2017 validation split and VisualGenome1.2 to evaluate on GeneCIS.
+You can also find instructions to download: parsed CC3M scene graphs; 1.6M mined triplets from CC3M; and pre-trained model weights.
 
 ## <a name="cite"/> :clipboard: Citation
 

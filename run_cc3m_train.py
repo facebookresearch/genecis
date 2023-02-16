@@ -151,20 +151,11 @@ def main():
     executor.update_parameters(name="cc3m")
 
     all_trainers = []
-    for concreteness_threshold in (4.8,):
-        for num_samples_per_epoch in (1.6e6,):
+    args.dist_url = get_init_file().as_uri()
+    args.log_dir = create_uq_log_dir(args.log_dir)
 
-            args_new = deepcopy(args)
-            args_new.epochs = int(10e6 / num_samples_per_epoch)             # Train for a given number of steps (10e6)          
-            args_new.concreteness_threshold = concreteness_threshold
-            args_new.num_samples_per_epoch = num_samples_per_epoch
-
-            # Create directory to store logs and checkpoints...
-            args_new.dist_url = get_init_file().as_uri()
-            args_new.log_dir = create_uq_log_dir(args_new.log_dir)
-
-            trainer = Trainer(args_new)
-            all_trainers.append(trainer)
+    trainer = Trainer(args)
+    all_trainers.append(trainer)
 
     jobs = executor.submit_array(all_trainers)
 

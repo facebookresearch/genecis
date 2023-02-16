@@ -48,19 +48,18 @@ def get_args_parser():
     parser.add_argument('--lr', default=1e-6, type=float)
     parser.add_argument('--lamda', default=100, type=float, help='1 / temperature for sotftmax operation')
     parser.add_argument('--weight_decay', default=0, type=float)
-    parser.add_argument('--epochs', default=100, type=int)
+    parser.add_argument('--epochs', default=6, type=int)
     parser.add_argument('--clip_grad_norm', default=True, type=bool_flag)
 
     # Loss lambdas
     parser.add_argument('--base_contrastive', default=1, type=float)
 
     # CC3M extracted data paths
-    parser.add_argument('--cc3m_deterministic_root_path', default=cfg.cc3m_deterministic_root_path, type=int)
+    parser.add_argument('--cc3m_deterministic_root_path', default=cfg.cc3m_deterministic_root_path, type=str)
     parser.add_argument('--cc3m_annots_path', default=cfg.cc3m_tsg_path, type=str)
 
     # General CC3M params
     parser.add_argument('--num_samples_per_epoch', default=1600000, type=int)
-    parser.add_argument('--deterministic_samples_key', default=None, type=none_flag, help='A key defining which deterministic samples to use')
     parser.add_argument('--concreteness_threshold', default=cfg.cc3m_concreteness_threshold, type=float, help="Threshold for how visually conrete the sampls images are")
     parser.add_argument('--val_start_idx', default=0, type=int, help='Dictates where from the dataset to sample the validation set')
 
@@ -84,7 +83,9 @@ def main(args):
 
     init_distributed_mode(args)
     fix_random_seeds(args.seed)
+    print('================== ARGS ==================')
     print("\n".join("%s: %s" % (k, str(v)) for k, v in sorted(dict(vars(args)).items())))
+    print('================== ARGS ==================')
     cudnn.benchmark = True
 
     # --------------
@@ -159,8 +160,8 @@ def main(args):
     print(f'Evaluating on GeneCIS {change_attribute_split_path}')
     change_attribute_valset = VAWValSubset(val_split_path=change_attribute_split_path, tokenizer=tokenizer, transform=clip_preprocess)
 
-    same_object_split_path = os.path.join(cfg.genecis_root, 'same_object.pkl')
-    print(f'Evaluating on GeneCIS {args.dataset}')
+    same_object_split_path = os.path.join(cfg.genecis_root, 'focus_object.pkl')
+    print(f'Evaluating on GeneCIS {same_object_split_path}')
     same_object_valset = COCOValSubset(val_split_path=same_object_split_path, tokenizer=tokenizer, transform=clip_preprocess)
 
     # --------------
