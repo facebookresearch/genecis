@@ -13,6 +13,8 @@ from tqdm import tqdm
 
 from config import cc3m_root, cc3m_deterministic_root_path, cc3m_tsg_path, noun_concreteness_score_path, NUM_SHARDS
 
+CC3M_MIN_IMGS_WITH_SUBJECT = 5
+
 def create_deterministic_subset(dataset, num_samples=10e6, save_path=None, concreteness_threshold=None, shard_index=None):
 
     dataset_type = type(dataset).__name__
@@ -35,7 +37,7 @@ def create_deterministic_subset(dataset, num_samples=10e6, save_path=None, concr
 class CCConditionalBaseDataset(Dataset):
 
     def __init__(self, cc3m_deterministic_root_path: str = None,       # Can either be key into predefined paths or an entire path in itself
-                        min_images_with_subject: int = 2, 
+                        min_images_with_subject: int = CC3M_MIN_IMGS_WITH_SUBJECT, 
                         num_samples_per_epoch: int = 100, 
                         transform = None, 
                         tokenizer = None,

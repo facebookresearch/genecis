@@ -59,7 +59,6 @@ def get_args_parser():
     parser.add_argument('--cc3m_annots_path', default=cfg.cc3m_tsg_path, type=str)
 
     # General CC3M params
-    parser.add_argument('--min_images_with_subject', default=cfg.cc3m_min_images_with_subject, type=int)
     parser.add_argument('--num_samples_per_epoch', default=1600000, type=int)
     parser.add_argument('--deterministic_samples_key', default=None, type=none_flag, help='A key defining which deterministic samples to use')
     parser.add_argument('--concreteness_threshold', default=cfg.cc3m_concreteness_threshold, type=float, help="Threshold for how visually conrete the sampls images are")
@@ -141,7 +140,6 @@ def main(args):
     print('Loading datasets...')
     tokenizer = partial(clip.tokenize, truncate=True)
     train_dataset = CCConditionalDistractor(cc3m_annots_path=args.cc3m_annots_path,
-        min_images_with_subject=args.min_images_with_subject, 
         num_samples_per_epoch=args.num_samples_per_epoch,
         cc3m_deterministic_root_path=args.cc3m_deterministic_root_path,
         transform=train_prepocess, 

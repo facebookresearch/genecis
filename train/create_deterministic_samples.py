@@ -52,5 +52,5 @@ if __name__ == '__main__':
 
         args.save_path = os.path.join(args.save_dir, f'shard_{args.shard_index}.pt')
 
-    dataset = CCConditionalDistractor(min_images_with_subject=cfg.cc3m_min_images_with_subject, transform=None, tokenizer=None, cc3m_annots_path=cfg.cc3m_tsg_path)
+    dataset = CCConditionalDistractor(transform=None, tokenizer=None, cc3m_annots_path=cfg.cc3m_tsg_path)
     cc_3m_dataset.create_deterministic_subset(dataset, args.num_samples, save_path=args.save_path, concreteness_threshold=args.concreteness_threshold, shard_index=args.shard_index)
