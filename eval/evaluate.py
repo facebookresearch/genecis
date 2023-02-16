@@ -125,14 +125,17 @@ def main(args):
 
     elif 'attribute' in args.dataset:
         
-        print(f'Evaluating on GeneCIS {args.dataset}')
+        print(f'Evaluating on GeneCIS {args.dataset} from {genecis_split_path}')
 
         val_dataset_subset = VAWValSubset(val_split_path=genecis_split_path, tokenizer=tokenizer, transform=preprocess)
+        print(f'Evaluating on {len(val_dataset_subset)} templates...')
 
     elif 'object' in args.dataset:
 
-        print(f'Evaluating on GeneCIS {args.dataset}')
+        print(f'Evaluating on GeneCIS {args.dataset} from {genecis_split_path}')
+
         val_dataset_subset = COCOValSubset(val_split_path=genecis_split_path, tokenizer=tokenizer, transform=preprocess)
+        print(f'Evaluating on {len(val_dataset_subset)} templates...')
 
     else:
 
