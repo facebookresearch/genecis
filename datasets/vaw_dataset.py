@@ -80,15 +80,7 @@ class VAWValSubset(VAWDataset):
         with open(val_split_path, 'rb') as handle:
             val_samples = pickle.load(handle)
 
-        # TODO: This is a hack, and should not be needed for the final version
-        gallery_lens, counts = np.unique([len(x['gallery']) for x in val_samples], return_counts=True)
-        modal_gallery_len = gallery_lens[np.argmax(counts)]
-        refined_val_samples = [s for s in val_samples if len(s['gallery']) == modal_gallery_len]
-        self.val_samples = refined_val_samples
-        
-        print(f'Evaluating VAW with gallery length {modal_gallery_len + 1} (including true target)')
-        print(f'Discarding {len(val_samples) - len(refined_val_samples)} samples...')
-
+        self.val_samples = val_samples
         self.tokenizer = tokenizer
 
     def __getitem__(self, index):

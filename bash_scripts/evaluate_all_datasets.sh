@@ -19,14 +19,6 @@ NGPUS=8
 PORT=$RANDOM
 
 # -------------
-# INIT
-# -------------
-export PYTHONPATH=$PROJECT_ROOT
-cd $PROJECT_ROOT
-cd eval/
-echo "Port:$PORT"
-
-# -------------
 # DEFINE MODEL SPECS
 # -------------
 MODEL='RN50x4'
@@ -38,6 +30,14 @@ COMBINER_MODE='combiner_original'
 COMBINER_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/09.10.2022_93d0/combiner_best.pt"
 CLIP_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/09.10.2022_93d0/clip_model_best.pt"
 
+# -------------
+# INIT
+# -------------
+export PYTHONPATH=$PROJECT_ROOT
+cd $PROJECT_ROOT
+cd eval/
+echo "Port:$PORT"
+
 # DATASET='CIRR'
 # ${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
 #                                                                                 --model $MODEL --combiner_mode $COMBINER_MODE\
@@ -48,15 +48,15 @@ CLIP_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/09
 #                                                                                 --model $MODEL --combiner_mode $COMBINER_MODE\
 #                                                                                 --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
 
-DATASET='focus_attribute'
-${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
-                                                                                --model $MODEL --combiner_mode $COMBINER_MODE\
-                                                                                --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
+# DATASET='focus_attribute'
+# ${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
+#                                                                                 --model $MODEL --combiner_mode $COMBINER_MODE\
+#                                                                                 --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
 
-DATASET='change_attribute'
-${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
-                                                                                --model $MODEL --combiner_mode $COMBINER_MODE\
-                                                                                --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
+# DATASET='change_attribute'
+# ${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
+#                                                                                 --model $MODEL --combiner_mode $COMBINER_MODE\
+#                                                                                 --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
 
 DATASET='focus_object'
 ${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
