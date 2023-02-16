@@ -93,7 +93,7 @@ def validate(clip_model, combiner, valloader, topk=(1, 2, 3), save_path=None):
     with torch.no_grad():
         for batch in tqdm(valloader):
 
-            ref_img, caption, gallery_set, target_rank = [x.cuda(non_blocking=True) for x in batch]
+            ref_img, caption, gallery_set, target_rank = [x.cuda(non_blocking=True) for x in batch[:4]]
             bsz, n_gallery, _, h, w = gallery_set.size()
             caption = caption.squeeze()
 

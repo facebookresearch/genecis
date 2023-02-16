@@ -118,7 +118,7 @@ class VAWValSubset(VAWDataset):
             caption = self.tokenizer(caption)
 
         # By construction, target_rank = 0
-        return reference, caption, gallery_and_target, 0  
+        return reference, caption, gallery_and_target, 0
 
     def __len__(self):
         return len(self.val_samples)

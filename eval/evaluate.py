@@ -52,6 +52,11 @@ def get_args_parser():
     # Save params
     parser.add_argument('--pred_save_path', default=None, type=none_flag, help='Where to save predictions, dont save by default')
 
+    parser.add_argument('--eval_mode', default='global', type=str)
+    parser.add_argument('--eval_version', default='v3', type=str, help='Only valid for VAW and COCO')
+    parser.add_argument('--dilation', default=0.7, type=float, help='Only valid for VAW')
+    parser.add_argument('--pad_crop', default=True, type=bool_flag, help='Only valid for VAW')
+
     return parser
 
 def main(args):
@@ -112,7 +117,7 @@ def main(args):
     print('Loading datasets...')
     tokenizer = partial(clip.tokenize, truncate=True)
     genecis_split_path = os.path.join(genecis_root, f'{args.dataset}.pkl')
-
+    
     if args.dataset == 'CIRR':
 
         val_dataset_return_images = CIRRImageDataset(split='val', preprocess=preprocess, tokenizer=tokenizer)
