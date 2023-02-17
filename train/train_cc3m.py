@@ -329,7 +329,7 @@ def main(args):
                 global_step=global_step)
 
             # Print
-            print(f'Epoch {epoch} | Train Loss: {train_loss_meters["total_loss"]:.4f}')
+            print(f'Epoch {epoch} | Train Loss: {train_loss_meters["base_loss"]:.4f}')
             val_print_str = f'Epoch {epoch} CIRR Eval |' + ' | '.join([f'Recall @ {k} = {v.avg:.4f}' for k, v in recall_meters_cirr.items()])
             print(val_print_str)
 
@@ -356,7 +356,7 @@ def main(args):
                 best_val_recall = recall_meters_cirr[1].avg
 
         np.random.seed(np.random.get_state()[1][0] + epoch)
-        step_scheduler(scheduler=scheduler, metric=train_loss_meters['total_loss'], args=args)
+        step_scheduler(scheduler=scheduler, metric=train_loss_meters['base_loss'], args=args)
 
 if __name__ == '__main__':
 

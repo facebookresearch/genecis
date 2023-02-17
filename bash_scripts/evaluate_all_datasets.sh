@@ -21,20 +21,14 @@ PORT=$RANDOM
 # -------------
 # DEFINE MODEL SPECS
 # -------------
-MODEL='ViT-B/16'
-# COMBINER_MODE='combiner_original'
-COMBINER_MODES=('image_only' 'text_only' 'image_plus_text')
-COMBINER_MODE=${COMBINER_MODES[$SLURM_ARRAY_TASK_ID]}
+MODEL='RN50x4'          # Set to one of the CLIP models
+COMBINER_MODE='combiner_original'           # Either learned combiner head or one of ('image_only' 'text_only' 'image_plus_text')
 
 # -------------
 # DEFINE PRETRAINED PATHS
 # -------------
-# COMBINER_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/09.10.2022_93d0/combiner_best.pt"
-# CLIP_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/09.10.2022_93d0/clip_model_best.pt"
-# COMBINER_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/10.10.2022_2d38/combiner_best.pt"
-# CLIP_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/10.10.2022_2d38/clip_model_best.pt"
-COMBINER_PRETRAIN_PATH="None"
-CLIP_PRETRAIN_PATH="None"
+COMBINER_PRETRAIN_PATH=""               # Set to path of model to evaluate (combiner head)  (set to 'None' if using image_only etc.)
+CLIP_PRETRAIN_PATH=""                   # Set to path of model to evaluate (backbone)  (set to 'None' to use CLIP pre-trained model, if using image_only etc.)
 
 # -------------
 # INIT
@@ -44,15 +38,7 @@ cd $PROJECT_ROOT
 cd eval/
 echo "Port:$PORT"
 
-DATASET='CIRR'
-${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
-                                                                                --model $MODEL --combiner_mode $COMBINER_MODE\
-                                                                                --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
-
-DATASET='mit_states'
-${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
-                                                                                --model $MODEL --combiner_mode $COMBINER_MODE\
-                                                                                --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
+# =================== GeneCIS EVAL ===================
 
 DATASET='focus_attribute'
 ${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
@@ -70,6 +56,19 @@ ${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $POR
                                                                                 --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
 
 DATASET='change_object'
+${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
+                                                                                --model $MODEL --combiner_mode $COMBINER_MODE\
+                                                                                --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
+
+
+# =================== CIR DATASETS ===================
+
+DATASET='CIRR'
+${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
+                                                                                --model $MODEL --combiner_mode $COMBINER_MODE\
+                                                                                --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
+
+DATASET='mit_states'
 ${PYTHON} -m torch.distributed.launch --nproc_per_node=$NGPUS --master_port $PORT evaluate.py --dataset $DATASET\
                                                                                 --model $MODEL --combiner_mode $COMBINER_MODE\
                                                                                 --combiner_pretrain_path $COMBINER_PRETRAIN_PATH --clip_pretrain_path $CLIP_PRETRAIN_PATH
