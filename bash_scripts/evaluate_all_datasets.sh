@@ -1,15 +1,3 @@
-#!/bin/bash
-#SBATCH --time=2:00:00
-#SBATCH --job-name=eval
-#SBATCH --partition=devlab
-#SBATCH --gres=gpu:8
-#SBATCH --mem=100G
-#SBATCH --cpus-per-task=10
-#SBATCH --array=0-2
-#SBATCH --output=/checkpoint/sgvaze/slurm_outputs/myLog-%A_%a.out
-#SBATCH --chdir=/private/home/sgvaze/genecis/
-#--------------------------
-
 # -------------
 # DEFINE EVAL PARAMS
 # -------------
