@@ -17,7 +17,7 @@ Find more details in our [paper](TODO).
 
 [:train: 4. Training](#training)
 
-[:clipboard: 5. GeneCIS annotation format](#annots)
+[:closed_book: 5. GeneCIS annotation format](#annots)
 
 [:chart_with_upwards_trend: 6. Evaluation](#eval)
 
@@ -77,7 +77,7 @@ Otherwise, for single node training, an example command is given in:
 bash_scripts/train_cc3m.sh
 ```
 
-## <a name="annots"/> :clipboard: GeneCIS annotation format
+## <a name="annots"/> :closed_book: GeneCIS annotation format
 
 All GeneCIS templates (for each of the four tasks) are provided as a list of ```dicts``` in JSON files in the ```genecis``` sub-directory. Each ```dict``` cotains keys for: reference image (image ID); target image (image ID); text condition (string); list of gallery images (image IDs).
 
