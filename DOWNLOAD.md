@@ -14,8 +14,8 @@ We release weights both from our main evaluations (Table 2), which is initialize
 
 | CLIP Backbone | Training Set | GeneCIS Avg. Recall @ 1 | Backbone | Combiner |
 |---------------|--------------|-------------------------|----------|----------|
-| RN50x4        | CC3M         | 16.8                    | [download](TODO) | [download](TODO) |
-| ViT-B/16      | CC3M         | 17.6                    | [download](TODO) | [download](TODO) |
+| RN50x4        | CC3M         | 16.8                    | [download](https://dl.fbaipublicfiles.com/genecis/rn50x4_backbone.pt) | [download](https://dl.fbaipublicfiles.com/genecis/rn50x4_combiner_head.pt) |
+| ViT-B/16      | CC3M         | 17.6                    | [download](https://dl.fbaipublicfiles.com/genecis/vitb16_backbone.pt) | [download](https://dl.fbaipublicfiles.com/genecis/vitb16_combiner_head.pt) |
 
 ## To train on Conceptual Captions 3M (CC3M)
 1. You will first need to download the image-caption data from [here](https://ai.google.com/research/ConceptualCaptions/download). The directory contents should look like:
@@ -27,7 +27,7 @@ We release weights both from our main evaluations (Table 2), which is initialize
 ```
 
 2. This repo contains scripts to parse scene graphs from CC3M and to mine training triplets. To do so, you will need to download the database of noun visual concreteness from [here](http://crr.ugent.be/archives/1330).
-Alternatively, you can download the [scene graphs](TODO) and [training triplets](TODO) from here. 
+Alternatively, you can download the [scene graphs](https://dl.fbaipublicfiles.com/genecis/cc3m_scene_graphs.pt) and [training triplets](https://dl.fbaipublicfiles.com/genecis/cc3m_training_triplets_1.6M.pt) from here. 
 
 ## For additional evaluations
 
