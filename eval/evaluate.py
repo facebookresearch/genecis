@@ -111,7 +111,7 @@ def main(args):
     # --------------
     print('Loading datasets...')
     tokenizer = partial(clip.tokenize, truncate=True)
-    genecis_split_path = os.path.join(genecis_root, f'{args.dataset}.pkl')
+    genecis_split_path = os.path.join(genecis_root, f'{args.dataset}.json')
     
     if args.dataset == 'CIRR':
 

@@ -4,7 +4,7 @@ from torch.utils.data import Dataset
 import os
 
 from PIL import Image
-import pickle
+import json
 import torch
 import numpy as np
 
@@ -77,8 +77,8 @@ class VAWValSubset(VAWDataset):
     def __init__(self, val_split_path, tokenizer=None, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        with open(val_split_path, 'rb') as handle:
-            val_samples = pickle.load(handle)
+        with open(val_split_path) as f:
+            val_samples = json.load(f)
 
         self.val_samples = val_samples
         self.tokenizer = tokenizer

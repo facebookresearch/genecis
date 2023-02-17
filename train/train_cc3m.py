@@ -156,11 +156,11 @@ def main(args):
     cirr_val_dataset_return_images = CIRRImageDataset(split='val', preprocess=clip_preprocess, tokenizer=tokenizer)
     cirr_val_dataset_global = CIRRValGlobalDataset(split='val', preprocess=clip_preprocess, tokenizer=tokenizer)
     
-    change_attribute_split_path = os.path.join(cfg.genecis_root, 'change_attribute.pkl')
+    change_attribute_split_path = os.path.join(cfg.genecis_root, 'change_attribute.json')
     print(f'Evaluating on GeneCIS {change_attribute_split_path}')
     change_attribute_valset = VAWValSubset(val_split_path=change_attribute_split_path, tokenizer=tokenizer, transform=clip_preprocess)
 
-    same_object_split_path = os.path.join(cfg.genecis_root, 'focus_object.pkl')
+    same_object_split_path = os.path.join(cfg.genecis_root, 'focus_object.json')
     print(f'Evaluating on GeneCIS {same_object_split_path}')
     same_object_valset = COCOValSubset(val_split_path=same_object_split_path, tokenizer=tokenizer, transform=clip_preprocess)
 

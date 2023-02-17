@@ -17,9 +17,11 @@ Find more details in our [paper](TODO).
 
 [:train: 4. Training](#training)
 
-[:chart_with_upwards_trend: 5. Evaluation](#eval)
+[:clipboard: 5. GeneCIS annotation format](#annots)
 
-[:clipboard: 6. Citation](#cite)
+[:chart_with_upwards_trend: 6. Evaluation](#eval)
+
+[:clipboard: 7. Citation](#cite)
 
 ## <a name="install"/> :computer: Installation
 
@@ -74,6 +76,14 @@ Otherwise, for single node training, an example command is given in:
 ```
 bash_scripts/train_cc3m.sh
 ```
+
+## <a name="annots"/> :clipboard: GeneCIS annotation format
+
+All GeneCIS templates (for each of the four tasks) are provided as a list of ```dicts``` in JSON files in the ```genecis``` sub-directory. Each ```dict``` cotains keys for: reference image (image ID); target image (image ID); text condition (string); list of gallery images (image IDs).
+
+* **Annotations for attribute-based tasks** further contain bounding boxes for the object instance in the template. This is then cropped, dilated and padded to square in the evaluation code. The image ID is specified as ```image_id``` and refers to the VisualGenome1.2 image ID.
+* **Annotations for object-based tasks** have image ID specified as ```val_image_id```, referring to the image ID in the COCO 2017 validation set.
+
 
 ## <a name="eval"/> :chart_with_upwards_trend: Evaluation
 

@@ -15,8 +15,8 @@ COMBINER_MODE='combiner_original'           # Either learned combiner head or on
 # -------------
 # DEFINE PRETRAINED PATHS
 # -------------
-COMBINER_PRETRAIN_PATH=""               # Set to path of model to evaluate (combiner head)  (set to 'None' if using image_only etc.)
-CLIP_PRETRAIN_PATH=""                   # Set to path of model to evaluate (backbone)  (set to 'None' to use CLIP pre-trained model, if using image_only etc.)
+COMBINER_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/09.10.2022_93d0/combiner_best.pt"               # Set to path of model to evaluate (combiner head)  (set to 'None' if using image_only etc.)
+CLIP_PRETRAIN_PATH="/checkpoint/sgvaze/conditional_similarity/cc3m/tb_logs_v3/09.10.2022_93d0/clip_model_best.pt"                   # Set to path of model to evaluate (backbone)  (set to 'None' to use CLIP pre-trained model, if using image_only etc.)
 
 # -------------
 # INIT
